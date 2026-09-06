@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  LUMBOL LAWRENCE TITYEM — FINTECH BACKEND PORTFOLIO (ONE PAGE)
+  ============================================================
+  This is ONE file that contains three languages stacked together:
+    1. HTML  -> the STRUCTURE (what elements exist: headings, buttons, text)
+    2. CSS   -> the STYLE     (colors, fonts, spacing, layout)
+    3. JS    -> the BEHAVIOR  (things that move or respond to clicks)
+
+  You will find HTML in the <body> tag below, CSS inside the <style> tag,
+  and (later, once we need it) JS inside a <script> tag at the bottom.
+
+  Think of it like a house:
+    HTML  = the rooms and walls (structure)
+    CSS   = the paint, furniture, and lighting (appearance)
+    JS    = the light switches and doorbells (interactivity)
+
+  THIS FIRST VERSION builds:
+    - The full <head> (page settings + fonts)
+    - The full CSS "design token" system (our color/font/spacing rules)
+    - The complete HERO section (the very first thing a visitor sees)
+    - Empty placeholder sections for what comes next, so the file is
+      valid and won't look broken if you open it right now.
+-->
+<html lang="en">
+<head>
+  <!--
+    <meta charset="UTF-8"> tells the browser: "this file's text uses the
+    UTF-8 character system." Without this, special characters (like — or ’)
+    can render as garbled symbols. Always include this, it's not optional.
+  -->
+  <meta charset="UTF-8">
+
+  <!--
+    This meta tag tells MOBILE browsers "don't zoom this page out to fit a
+    desktop layout — use the phone's actual screen width." Without it, your
+    site looks tiny and zoomed-out on phones. This is required for any
+    responsive (mobile-friendly) site.
+  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- This text appears in the browser tab and in Google search results. -->
+  <title>Lumbol Lawrence Tityem — Backend Engineer, Fintech Systems</title>
+
+  <!--
+    This is a short description search engines (and link previews on
+    LinkedIn/Twitter) may show under your page title. Keep it factual.
+  -->
+  <meta name="description" content="Backend engineer specializing in distributed fintech systems — event-driven architecture, wallet ledgers, and production-grade observability.">
+
+  <!--
+    FONTS: we are borrowing three typefaces from Google Fonts instead of
+    using whatever default font every visitor's computer happens to have.
+    This single line downloads all three font families we chose in the
+    design plan above (Fraunces for the headline, IBM Plex Sans for body
+    text, IBM Plex Mono for numbers/code/labels).
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /*
+      ========================================================
+      DESIGN TOKENS
+      ========================================================
+      A "token" is just a named value we reuse everywhere, instead of
+      typing the same raw color code or spacing number over and over.
+
+      Why bother? Two reasons:
+      1. If you later decide the gold accent should be slightly darker,
+         you change ONE line here instead of hunting through the whole file.
+      2. It documents your own design decisions — anyone reading this CSS
+         (including future-you) can see the whole palette in one place.
+
+      ":root" is a special CSS selector meaning "the whole document."
+      Variables defined here (written as --name: value;) are available
+      everywhere else in the CSS using var(--name).
+    */
+    :root {
+      /* ---- COLOR: the ledger/ink palette ---- */
+      --color-bg: #0F1419;          /* page background: deep ink-navy, not pure black */
+      --color-surface: #171D26;     /* slightly lighter navy, used for section dividers/rails */
+      --color-text: #E8E6DF;        /* main text: warm paper-white, easier on the eyes than pure #FFFFFF */
+      --color-text-muted: #8B93A1;  /* secondary text: dimmer blue-grey, for supporting lines */
+      --color-accent-gold: #C89B3C; /* "verified / passing" signal color, used sparingly */
+      --color-accent-blue: #5B7FA6; /* links and interactive data, calm and financial */
+      --color-hairline: #262E3A;    /* thin divider lines between sections */
+
+      /* ---- TYPE: which font family plays which role ---- */
+      --font-display: 'Fraunces', serif;         /* ONLY for the name/headline — our one bold moment */
+      --font-body: 'IBM Plex Sans', sans-serif;  /* all normal paragraph and label text */
+      --font-mono: 'IBM Plex Mono', monospace;   /* numbers, metrics, tech stack names, status tags */
+
+      /* ---- SPACING: a consistent scale so gaps don't feel random ----
+         Using multiples of one base unit (8px) keeps vertical rhythm
+         consistent — professional sites rarely use "random" gaps like
+         13px or 22px; they stick to a scale like this one. */
+      --space-1: 8px;
+      --space-2: 16px;
+      --space-3: 24px;
+      --space-4: 40px;
+      --space-5: 64px;
+      --space-6: 96px;
+
+      /* ---- LAYOUT: how wide the content column is allowed to get ----
+         680px keeps line-lengths short and readable (the design skill
+         guidance is: lines under ~80 characters read best). */
+      --content-width: 680px;
+    }
+
+    /*
+      CSS RESET
+      ========================================================
+      Every browser applies its OWN small default styles to elements
+      (extra margin on <body>, different box-sizing behavior, etc).
+      This block cancels those out so our design starts from a clean,
+      predictable baseline instead of fighting invisible browser defaults.
+    */
+    * {
+      margin: 0;             /* remove default spacing every browser adds around elements */
+      padding: 0;            /* remove default inner spacing too */
+      box-sizing: border-box; /* makes width/height calculations include padding+border, not exclude them */
+    }
+
+    /*
+      BASE PAGE STYLE
+      This targets the <body> tag — the visible page itself — and sets
+      the background color, default text color, default font, and turns
+      on smoother font rendering.
+    */
+    body {
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      line-height: 1.6;             /* space between lines of text, for readability */
+      -webkit-font-smoothing: antialiased; /* renders text slightly smoother on Mac/Chrome */
+    }
+
+    /*
+      ACCESSIBILITY: VISIBLE KEYBOARD FOCUS
+      ========================================================
+      Some people don't use a mouse — they "Tab" through links and
+      buttons using only a keyboard. Browsers show a focus outline by
+      default, but many portfolio sites accidentally remove it (or it's
+      barely visible against a dark background) while styling links.
+      This rule guarantees a clearly visible gold outline appears on
+      whatever link/button currently has keyboard focus, no matter what
+      other styles are applied to it above.
+    */
+    a:focus-visible,
+    summary:focus-visible {
+      outline: 2px solid var(--color-accent-gold);
+      outline-offset: 3px;
+    }
+
+    /*
+      ACCESSIBILITY: RESPECT "REDUCE MOTION" SYSTEM SETTING
+      ========================================================
+      Some visitors turn on "reduce motion" in their OS settings, often
+      because animation causes them physical discomfort (vestibular
+      disorders) or they simply prefer a calmer interface. This media
+      query detects that setting and, when it's on, turns off our
+      hover-transition animations everywhere in one place, instead of
+      us having to remember to guard every single transition rule.
+    */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+      }
+    }
+
+    /*
+      THE "RAIL" LAYOUT WRAPPER
+      Instead of centering everything (the typical marketing-site look),
+      we push content to sit inside a narrow left-aligned column with
+      consistent horizontal padding. This is what makes the page read
+      like a printed statement instead of a landing page.
+    */
+    .page {
+      max-width: var(--content-width);
+      margin: 0 auto;              /* centers the COLUMN itself on wide screens... */
+      padding: var(--space-5) var(--space-3); /* ...but text inside stays left-aligned, see below */
+    }
+
+    /*
+      ====================================================
+      HERO SECTION
+      ====================================================
+      This is the very first thing anyone sees. It answers three
+      questions fast: who are you, what do you do, where can I look next.
+    */
+    .hero {
+      /* No special layout needed yet beyond the .page wrapper's padding —
+         this rule exists so we have a hook to attach hero-only spacing to. */
+      padding-bottom: var(--space-5);
+    }
+
+    /*
+      STATUS TAG
+      A small pill-shaped label, e.g. "Available for backend roles".
+      We use the gold accent here ON PURPOSE — this is one of the very
+      few places gold appears, which is what makes it feel meaningful
+      instead of decorative.
+    */
+    .status-tag {
+      display: inline-flex;         /* lets the dot and text sit side by side */
+      align-items: center;
+      gap: var(--space-1);
+      font-family: var(--font-mono); /* mono = "this is a system status", matches our ledger theme */
+      font-size: 0.8rem;
+      color: var(--color-accent-gold);
+      border: 1px solid var(--color-accent-gold);
+      padding: 4px 12px;
+      border-radius: 3px;           /* barely rounded — sharp, not the bubbly SaaS-card look */
+      margin-bottom: var(--space-3);
+    }
+
+    /* The small dot inside the status tag, drawn with pure CSS (no image) */
+    .status-tag::before {
+      content: "";                  /* ::before injects an empty element we can style */
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;           /* 50% on an equal width/height box = a perfect circle */
+      background-color: var(--color-accent-gold);
+      display: inline-block;
+    }
+
+    /*
+      NAME / HEADLINE
+      This is our ONE bold typographic moment, per the design plan —
+      everything else on the page stays quiet so this stands out.
+    */
+    .hero h1 {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      /* clamp(min, preferred, max) = "never smaller than 2.2rem, never
+         bigger than 3.2rem, but scale smoothly with screen width (5vw)
+         in between." This is how the headline stays readable on both
+         a phone and a wide monitor without writing two separate rules. */
+      line-height: 1.15;
+      letter-spacing: -0.01em;      /* very slightly tighter spacing, common for large serif display type */
+      margin-bottom: var(--space-2);
+    }
+
+    /* The role line right under the name, e.g. "Backend Engineer — Fintech Systems" */
+    .hero .role {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: var(--color-accent-blue);
+      margin-bottom: var(--space-3);
+    }
+
+    /* The one-sentence pitch paragraph */
+    .hero p.pitch {
+      font-size: 1.05rem;
+      color: var(--color-text-muted);
+      max-width: 52ch;              /* "ch" = width of one character; caps the line length for readability */
+      margin-bottom: var(--space-4);
+    }
+
+    /*
+      ACTION LINKS
+      The row of buttons/links: "View Sentinel", "View Order Processing", "GitHub".
+      We use flexbox (display:flex) to lay them out side by side with even gaps.
+    */
+    .hero .actions {
+      display: flex;
+      flex-wrap: wrap;              /* lets buttons drop to a new line on narrow phone screens instead of overflowing */
+      gap: var(--space-2);
+    }
+
+    /* Shared style for every link styled as a button in the hero */
+    .hero .actions a {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: var(--color-text);
+      text-decoration: none;        /* removes the default underline */
+      border: 1px solid var(--color-hairline);
+      padding: 10px 18px;
+      border-radius: 3px;
+      transition: border-color 0.15s ease, color 0.15s ease;
+      /* transition = when border-color or text color changes (e.g. on hover),
+         animate it smoothly over 0.15 seconds instead of snapping instantly. */
+    }
+
+    /* :hover only applies while the mouse pointer is actually over the link */
+    .hero .actions a:hover {
+      border-color: var(--color-accent-blue);
+      color: var(--color-accent-blue);
+    }
+
+    /* The primary action (View Sentinel) gets slightly more visual weight */
+    .hero .actions a.primary {
+      border-color: var(--color-accent-gold);
+      color: var(--color-accent-gold);
+    }
+    .hero .actions a.primary:hover {
+      background-color: var(--color-accent-gold);
+      color: var(--color-bg);       /* text flips to dark navy so it stays readable against the now-gold background */
+    }
+
+    /*
+      SECTION DIVIDER
+      A thin horizontal line between major sections — this replaces
+      the "boxed card with a shadow" look with something quieter and
+      more document-like.
+    */
+    .divider {
+      border: none;                 /* removes the default <hr> 3D-bevel style */
+      border-top: 1px solid var(--color-hairline);
+      margin: var(--space-5) 0;
+    }
+
+    /*
+      PLACEHOLDER SECTIONS
+      These are empty for now — just enough structure to prove the file
+      is complete and valid. We will build each one in its own turn.
+    */
+    .section-stub {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      padding: var(--space-3) 0;
+    }
+
+    /*
+      ====================================================
+      SECTION LABEL
+      ====================================================
+      A small mono-font label that introduces every major section,
+      e.g. "SELECTED SYSTEMS". Not an ALL-CAPS "eyebrow" for decoration —
+      here it functions like a ledger's line-item header, so it earns
+      its place rather than just being a generic template flourish.
+    */
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-3);
+    }
+
+    /*
+      ====================================================
+      CASE STUDY ENTRY (one per project)
+      ====================================================
+      We use the native HTML <details> and <summary> elements for this.
+      <details> is a built-in, no-JavaScript-needed "expand/collapse"
+      widget every modern browser understands natively. <summary> is the
+      part that's ALWAYS visible and clickable; everything else inside
+      <details> only shows once a visitor clicks to expand it.
+      This keeps the one-page layout compact by default, while still
+      letting a curious recruiter or engineer go deep on demand.
+    */
+    .case {
+      border-top: 1px solid var(--color-hairline);
+      padding: var(--space-3) 0;
+    }
+
+    /* Removes the little triangle/arrow browsers add to <summary> by default,
+       so we can draw our own marker instead (see .case summary::after below) */
+    .case summary {
+      list-style: none;         /* removes the default disclosure triangle */
+      cursor: pointer;          /* shows a "clickable hand" pointer on hover */
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-2);
+    }
+    /* Chrome/Safari use a different mechanism for the same default triangle —
+       this second rule removes it there too, so both browser families match. */
+    .case summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .case-title {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 1.15rem;
+      color: var(--color-text);
+    }
+
+    /* The small "9.2/10 mentor rating" style badge next to each project title */
+    .case-rating {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--color-accent-gold);
+      white-space: nowrap;      /* keeps "9.2/10 · APPROVED" from wrapping onto two lines */
+    }
+
+    .case-pitch {
+      color: var(--color-text-muted);
+      font-size: 0.95rem;
+      margin-top: var(--space-1);
+    }
+
+    /*
+      TECH BADGE LIST
+      A simple inline list of the technologies used, styled as small
+      mono-font tags — not colorful "pill" chips, just quiet text tokens
+      separated by a middle dot, echoing a systems-log look.
+    */
+    .tech-list {
+      list-style: none;         /* removes default bullet points */
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-1) var(--space-2);
+      margin-top: var(--space-2);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--color-accent-blue);
+    }
+
+    /*
+      EXPANDED CONTENT (only visible once <details> is opened)
+      This holds the deeper stuff: architecture note, key engineering
+      decision, and test results — the material that does real
+      hiring-decision work once someone is curious enough to click in.
+    */
+    .case-body {
+      margin-top: var(--space-3);
+      padding-top: var(--space-3);
+      border-top: 1px dashed var(--color-hairline); /* dashed = visually distinct from the solid section dividers */
+    }
+
+    .case-body h4 {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-1);
+      margin-top: var(--space-3);
+    }
+    /* The very first h4 inside a case-body shouldn't have extra top margin,
+       since .case-body already has its own padding-top above it */
+    .case-body h4:first-child {
+      margin-top: 0;
+    }
+
+    .case-body p {
+      font-size: 0.95rem;
+      color: var(--color-text);
+    }
+
+    /*
+      KEY DECISION CALLOUT
+      A visually distinct box for "the decision we made and why" — this
+      is the single most important paragraph for a technical hiring
+      audience, so it gets its own quiet visual treatment (a left border,
+      like a blockquote) rather than blending into normal paragraph text.
+    */
+    .decision {
+      border-left: 2px solid var(--color-accent-gold);
+      padding-left: var(--space-2);
+      font-size: 0.95rem;
+      color: var(--color-text);
+    }
+
+    .case-links {
+      margin-top: var(--space-3);
+      display: flex;
+      gap: var(--space-2);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+    }
+    .case-links a {
+      color: var(--color-accent-blue);
+    }
+
+    /*
+      ====================================================
+      STACK SECTION (grouped skills)
+      ====================================================
+      "grid" is a CSS layout mode that arranges items into rows and
+      columns, like a spreadsheet. Unlike flexbox (which we used for
+      the hero buttons — good for a single row/line that can wrap),
+      grid is better here because we want a genuine multi-column
+      arrangement with each column staying aligned to the others.
+    */
+    .stack-grid {
+      display: grid;
+      /* repeat(auto-fit, minmax(180px, 1fr)) reads as: "fit as many
+         columns as will comfortably hold 180px each; if the screen is
+         too narrow for two 180px columns side by side, drop to one
+         column automatically." This is what makes it responsive
+         without writing a separate mobile-only rule. */
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--space-4) var(--space-3);
+    }
+
+    /* One category block, e.g. "Messaging" with its list underneath */
+    .stack-group h4 {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-2);
+      padding-bottom: var(--space-1);
+      border-bottom: 1px solid var(--color-hairline);
+    }
+
+    .stack-group ul {
+      list-style: none;
+    }
+
+    .stack-group li {
+      font-size: 0.95rem;
+      padding: 4px 0;
+      color: var(--color-text);
+    }
+
+    /*
+      ====================================================
+      CREDENTIALS SECTION (Certifications & Honors)
+      ====================================================
+      Same quiet, list-based approach as everything else on this page —
+      no badges or logos, just plain text. A recruiter scanning this
+      section wants facts fast, not decoration.
+    */
+    .credentials-list {
+      list-style: none;
+    }
+
+    .credentials-list li {
+      padding: var(--space-1) 0;
+      border-bottom: 1px solid var(--color-hairline);
+    }
+    /* :last-child targets only the final <li> in the list, so the very
+       last credential doesn't get an extra, dangling divider line under it */
+    .credentials-list li:last-child {
+      border-bottom: none;
+    }
+
+    .credential-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .credential-sub {
+      display: block;              /* forces this onto its own line, under the title */
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      margin-top: 2px;
+    }
+
+    /*
+      ====================================================
+      "ALSO BUILT" SECTION (supporting project)
+      ====================================================
+      Deliberately lighter-weight than the .case entries above — no
+      <details> expand/collapse, no key-decision callout. This is a
+      single always-visible row, on purpose: it proves full-stack range
+      without competing for attention with the two fintech flagships.
+    */
+    .also-built {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      padding: var(--space-2) 0;
+    }
+
+    .also-built-name {
+      font-weight: 600;
+    }
+
+    .also-built-tech {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+    }
+
+    .also-built a {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--color-accent-blue);
+      text-decoration: none;
+    }
+
+    /*
+      ====================================================
+      TEACHING SECTION
+      ====================================================
+      Plain text, no card, no icon — this is a short credibility line,
+      not another project to compete for attention. Keeping it simple
+      is itself a design choice: it signals "this is context, not a pitch."
+    */
+    .teaching p {
+      font-size: 0.95rem;
+      color: var(--color-text-muted);
+      max-width: 52ch;
+    }
+
+    /*
+      ====================================================
+      CONTACT SECTION
+      ====================================================
+      The last thing on the page, so it uses more space and bigger
+      touch targets than earlier link rows — this is the moment a
+      convinced visitor decides to actually reach out.
+    */
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      margin-top: var(--space-2);
+    }
+
+    .contact-links a {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: var(--color-text);
+      text-decoration: none;
+      border-bottom: 1px solid var(--color-hairline);
+      padding-bottom: 2px;
+      transition: border-color 0.15s ease, color 0.15s ease;
+    }
+
+    .contact-links a:hover {
+      color: var(--color-accent-gold);
+      border-color: var(--color-accent-gold);
+    }
+
+    /* The final line at the very bottom of the page — quiet, small, unobtrusive */
+    .footer-note {
+      margin-top: var(--space-6);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+    }
+
+    /*
+      ====================================================
+      RESPONSIVE POLISH — small screens (phones)
+      ====================================================
+      A "media query" is a CSS rule that only applies when a condition
+      is true — here, "the browser viewport is 600px wide or less,"
+      which covers almost every phone in portrait mode. Everything
+      inside this block OVERRIDES the desktop rules above it, but ONLY
+      while that condition holds. On a wide monitor, this block is
+      completely ignored.
+
+      We put this block LAST in the file on purpose: when two CSS rules
+      have equal specificity, the one written LATER in the file wins.
+      Placing our overrides at the very end guarantees they actually
+      take effect on small screens instead of silently losing to an
+      earlier, more "specific" rule.
+    */
+    @media (max-width: 600px) {
+      /* Large desktop spacing (64px/96px) feels bloated and wastes
+         precious phone-screen space — we shrink the whole scale here,
+         in one place, rather than hunting down every use of it. */
+      :root {
+        --space-5: 40px;
+        --space-6: 56px;
+      }
+
+      /*
+        THE CASE-CARD PROBLEM THIS FIXES:
+        On desktop, .case summary uses "justify-content: space-between"
+        to put the project title on the left and the rating badge
+        ("9.2/10 · APPROVED") on the far right, on the SAME line. On a
+        narrow phone screen, a long title and a badge fighting for the
+        same line either overlaps or squishes the title uncomfortably.
+        flex-direction: column stacks them instead — title first, badge
+        directly underneath — which reads far better on a narrow screen.
+      */
+      .case summary {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-1);
+      }
+
+      /* Without this, the hero action buttons can feel cramped edge-to-edge
+         on a phone; a little extra breathing room reads more comfortably. */
+      .hero .actions a {
+        flex: 1 1 auto;      /* lets each button grow to fill available width evenly */
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!--
+    ============================================================
+    HTML BODY — the actual visible content starts here.
+    ============================================================
+    Everything inside <div class="page"> is our left-aligned narrow column.
+  -->
+  <div class="page">
+
+    <!-- ============ HERO SECTION ============ -->
+    <section class="hero">
+
+      <!-- The small gold status pill. Change this text whenever your availability changes. -->
+      <span class="status-tag">Open to backend roles</span>
+
+      <!--
+        <h1> is the single most important heading on the whole page —
+        there should only ever be ONE <h1> per page. Screen readers and
+        search engines use it to understand "this page is about ______."
+      -->
+      <h1>Lumbol Lawrence Tityem</h1>
+
+      <p class="role">Backend Engineer — Fintech Systems</p>
+
+      <p class="pitch">
+        I build distributed backend systems for money movement — wallet
+        ledgers, event-driven order pipelines, fraud checks, and the
+        observability to trust them in production.
+      </p>
+
+      <!--
+        The three action links. Right now the hrefs (destinations) point
+        to "#sentinel" and "#order-processing" — anchor links that will
+        jump down to those sections once we build them in the next step.
+        The GitHub link is a real external URL, so it uses target="_blank"
+        to open in a new tab (rel="noopener" is a small security best
+        practice that prevents the new tab from being able to control
+        this original tab).
+      -->
+      <div class="actions">
+        <a href="#sentinel" class="primary">View Sentinel</a>
+        <a href="#order-processing">View Order Processing</a>
+        <a href="https://github.com/lumbol77" target="_blank" rel="noopener">GitHub</a>
+      </div>
+
+    </section>
+
+    <hr class="divider">
+
+    <!--
+      ============ PLACEHOLDER SECTIONS ============
+      These prove the page is structurally complete. We'll replace each
+      section-stub, one at a time, in our next messages — starting with
+      "Selected Systems" (your two flagship case studies) if that's what
+      you want next.
+    -->
+    <!--
+      ============ SELECTED SYSTEMS ============
+      Two <details> elements, one per flagship project. Each one is
+      closed by default (compact) and opens on click to reveal the
+      deeper case-study content.
+    -->
+    <section>
+      <p class="section-label">Selected systems</p>
+
+      <!-- ===== CASE 1: SENTINEL FINANCIAL ECOSYSTEM ===== -->
+      <!--
+        id="sentinel" lets the hero's "View Sentinel" button jump straight
+        here. "open" is not present, so this starts collapsed.
+      -->
+      <details id="sentinel" class="case">
+
+        <!--
+          <summary> is the part always visible, even when collapsed.
+          Clicking anywhere on it toggles the <details> open/closed.
+        -->
+        <summary>
+          <span>
+            <span class="case-title">Sentinel Financial Ecosystem</span>
+            <p class="case-pitch">Synchronous fintech core — P2P wallet transfers with bank-grade integrity guarantees.</p>
+          </span>
+          <span class="case-rating">9.2/10 · APPROVED</span>
+        </summary>
+
+        <!-- Tech badges: a quick-scan list for someone skimming, not reading -->
+        <ul class="tech-list">
+          <li>FastAPI</li>
+          <li>PostgreSQL</li>
+          <li>Redis</li>
+          <li>Celery</li>
+          <li>Scikit-Learn</li>
+          <li>Prometheus + Grafana</li>
+          <li>OpenTelemetry</li>
+          <li>Docker Compose</li>
+        </ul>
+
+        <!-- Everything below only appears once a visitor clicks to expand -->
+        <div class="case-body">
+
+          <h4>Problem</h4>
+          <p>
+            Concurrent balance mutations on the same wallet, duplicate
+            transaction retries, and asynchronous fraud scoring all had
+            to be handled correctly — without blocking legitimate users
+            when a downstream service (fraud, notifications) is slow or down.
+          </p>
+
+          <h4>Key decision</h4>
+          <p class="decision">
+            Fraud scoring fails <strong>open</strong>, not closed: if the
+            ML fraud service is unreachable after three retries, the
+            transfer proceeds and the event is logged — rather than
+            blocking every legitimate transfer whenever one internal
+            service has a bad moment. Pessimistic row-level locks are
+            acquired in deterministic wallet-ID order specifically to
+            make deadlocks structurally impossible, not just unlikely.
+          </p>
+
+          <h4>Test results</h4>
+          <p>49 passed, 6 skipped across 5 modules (auth, wallet, transfer, fraud, rate limiting) — 119.63s run.</p>
+
+          <div class="case-links">
+            <a href="https://github.com/lumbol77" target="_blank" rel="noopener">Source →</a>
+          </div>
+        </div>
+      </details>
+
+      <!-- ===== CASE 2: EVENT-DRIVEN ORDER PROCESSING SYSTEM ===== -->
+      <details id="order-processing" class="case">
+        <summary>
+          <span>
+            <span class="case-title">Event-Driven Order Processing System</span>
+            <p class="case-pitch">Asynchronous companion system — services coordinated only through a Kafka event stream, no shared database.</p>
+          </span>
+          <span class="case-rating">In progress</span>
+        </summary>
+
+        <ul class="tech-list">
+          <li>Kafka (KRaft)</li>
+          <li>FastAPI</li>
+          <li>PostgreSQL 16</li>
+          <li>SQLAlchemy (async)</li>
+          <li>confluent-kafka</li>
+          <li>Docker Compose</li>
+        </ul>
+
+        <div class="case-body">
+
+          <h4>Problem</h4>
+          <p>
+            Coordinate state across five independently owned services
+            with no shared database and no synchronous calls between
+            them — specifically solving the dual-write problem (writing
+            to your own database <em>and</em> announcing that write to
+            Kafka, two systems with no shared transaction) and idempotent
+            consumption under at-least-once delivery.
+          </p>
+
+          <h4>Key decision</h4>
+          <p class="decision">
+            <code>payment-worker</code> reacts to <code>InventoryReserved</code>,
+            never <code>OrderCreated</code> directly — charging a customer
+            before stock is confirmed available is a business error this
+            topology makes structurally impossible, not just discouraged
+            by convention. The dual-write problem itself is mitigated by
+            writing to Postgres first, then publishing to Kafka as a
+            separate step with its own retry and dead-letter path — a
+            full Transactional Outbox pattern is scoped but intentionally
+            deferred, and documented as such.
+          </p>
+
+          <h4>Honest limitations</h4>
+          <p>
+            Notification-worker does not yet subscribe to rejected orders;
+            Alembic migrations are not yet in place; only inventory-worker's
+            automated test suite is complete so far. Documented rather than hidden.
+          </p>
+
+          <div class="case-links">
+            <a href="https://github.com/lumbol77" target="_blank" rel="noopener">Source →</a>
+          </div>
+        </div>
+      </details>
+
+    </section>
+
+    <hr class="divider">
+
+    <section>
+      <p class="section-label">Stack</p>
+
+      <!--
+        Each .stack-group is one category. The CSS grid rule above
+        automatically arranges however many of these divs we put here
+        into responsive columns — we don't manually assign column
+        positions, the browser figures it out from minmax(180px, 1fr).
+      -->
+      <div class="stack-grid">
+
+        <div class="stack-group">
+          <h4>Backend & APIs</h4>
+          <ul>
+            <li>FastAPI</li>
+            <li>Python 3.11</li>
+            <li>SQLAlchemy (async)</li>
+            <li>Pydantic</li>
+          </ul>
+        </div>
+
+        <div class="stack-group">
+          <h4>Data & Messaging</h4>
+          <ul>
+            <li>PostgreSQL</li>
+            <li>Redis</li>
+            <li>Kafka (KRaft)</li>
+            <li>asyncpg</li>
+          </ul>
+        </div>
+
+        <div class="stack-group">
+          <h4>Auth & Security</h4>
+          <ul>
+            <li>JWT (HS256)</li>
+            <li>Bcrypt / Passlib</li>
+            <li>Idempotency middleware</li>
+          </ul>
+        </div>
+
+        <div class="stack-group">
+          <h4>Observability & DevOps</h4>
+          <ul>
+            <li>Prometheus</li>
+            <li>Grafana</li>
+            <li>OpenTelemetry</li>
+            <li>Docker Compose</li>
+          </ul>
+        </div>
+
+        <div class="stack-group">
+          <h4>Testing</h4>
+          <ul>
+            <li>pytest / pytest-asyncio</li>
+            <li>Mocked Kafka producers</li>
+            <li>SQLite compatibility shims</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <section>
+      <p class="section-label">Certifications & honors</p>
+
+      <ul class="credentials-list">
+        <li>
+          <span class="credential-title">B.Sc. Computer Science</span>
+          <span class="credential-sub">University of Jos, Nigeria — 2025</span>
+        </li>
+        <li>
+          <span class="credential-title">NYSC State Honors Awardee</span>
+          <span class="credential-sub">Adamawa State — 2025 · recognized for outstanding service during NYSC</span>
+        </li>
+        <li>
+          <span class="credential-title">Cybersecurity Certificate</span>
+          <span class="credential-sub">Cisco Networking Academy</span>
+        </li>
+      </ul>
+    </section>
+
+    <hr class="divider">
+
+    <section>
+      <p class="section-label">Also built</p>
+
+      <!--
+        A single row, not a <details> — this is intentionally lighter
+        weight than the fintech case studies above. It proves you can
+        ship a full production website (Next.js/React), without pulling
+        focus away from the backend-systems work this portfolio is for.
+      -->
+      <div class="also-built">
+        <div>
+          <span class="also-built-name">oxfordcreativeschool.com</span><br>
+          <span class="also-built-tech">Next.js · React · JavaScript</span>
+        </div>
+        <a href="https://oxfordcreativeschool.com" target="_blank" rel="noopener">Visit site →</a>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <section class="teaching">
+      <p class="section-label">Teaching</p>
+      <p>
+        Digital technology teacher for secondary school students in
+        Nigeria — breaking down distributed-systems-level thinking into
+        plain, step-by-step explanations is a habit that carries directly
+        into how I document and hand off backend systems.
+      </p>
+    </section>
+
+    <hr class="divider">
+
+    <section>
+      <p class="section-label">Contact</p>
+
+      <div class="contact-links">
+        <!--
+          NOTE: LinkedIn below is still a placeholder — swap it for your
+          real profile URL. Email is now your real address. mailto:
+          links open the visitor's default email app with your address
+          pre-filled in the "To" field.
+        -->
+        <a href="mailto:lumbolt@gmail.com">lumbolt@gmail.com</a>
+        <a href="https://github.com/lumbol77" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/lumbol-tityem-zuzul-117731213/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+
+      <p class="footer-note">Lumbol Lawrence Tityem — Anambra State, Nigeria</p>
+    </section>
+
+  </div>
+
+</body>
+</html>
